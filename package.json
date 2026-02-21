@@ -1,0 +1,16 @@
+{
+	"name": "docmost-desktop",
+	"version": "0.1.0",
+	"description": "A lightweight native desktop wrapper for Docmost",
+	"scripts": {
+		"dev": "electrobun dev",
+		"build": "electrobun build",
+		"start": "bun run build && bun run dev"
+	},
+	"dependencies": {
+		"electrobun": "1.13.1"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	}
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docmost Desktop - Setup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="icon.png" width="64" height="64" alt="Docmost" style="border-radius: 14px;" />
+        </div>
+        <h1>Docmost Desktop</h1>
+        <p class="subtitle">Connect to your Docmost instance</p>
+
+        <form id="settings-form">
+            <label for="url-input">Instance URL</label>
+            <input
+                id="url-input"
+                type="url"
+                placeholder="https://docs.example.com"
+                required
+                autofocus
+            />
+            <p class="hint">Enter the URL of your self-hosted Docmost instance or use app.docmost.com</p>
+
+            <button type="submit" id="connect-btn">
+                Save & Connect
+            </button>
+
+            <p id="error-msg" class="error" hidden></p>
+        </form>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
