@@ -129,11 +129,22 @@ function openMainWindow(): void {
 		});
 	});
 
-	// Disable right-click context menu (prevents "Inspect Element" breaking the view)
+	// Disable right-click context menu and fix scrolling for Mantine AppShell
 	mainWindow.webview.on("dom-ready", () => {
-		mainWindow?.webview.executeJavascript(
-			`document.addEventListener('contextmenu', e => e.preventDefault());`,
-		);
+		mainWindow?.webview.executeJavascript(`
+			document.addEventListener('contextmenu', e => e.preventDefault());
+			const style = document.createElement('style');
+			style.textContent = \`
+				html, body { height: 100% !important; overflow: hidden !important; }
+				.mantine-AppShell-main {
+					overflow-y: auto !important;
+					-webkit-overflow-scrolling: touch !important;
+					max-height: 100vh !important;
+				}
+				.ProseMirror { overflow-y: auto !important; }
+			\`;
+			document.head.appendChild(style);
+		`);
 	});
 
 	// Close-to-tray: when window closes, we lose the reference
@@ -256,13 +267,7 @@ function setupMenu(): void {
 				},
 				{ type: "separator" },
 				{ role: "toggleFullScreen" },
-				{ type: "separator" },
-				{
-					label: "Developer Tools",
-					action: "toggle-devtools",
-					accelerator: "Cmd+Alt+I",
-				},
-			],
+				],
 		},
 		{
 			label: "Window",
@@ -285,9 +290,6 @@ function setupMenu(): void {
 				if (mainWindow && settings.instanceUrl) {
 					mainWindow.webview.loadURL(settings.instanceUrl);
 				}
-				break;
-			case "toggle-devtools":
-				mainWindow?.webview.toggleDevTools();
 				break;
 			case "quit-app":
 				Utils.quit();
