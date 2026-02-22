@@ -129,6 +129,13 @@ function openMainWindow(): void {
 		});
 	});
 
+	// Disable right-click context menu (prevents "Inspect Element" breaking the view)
+	mainWindow.webview.on("dom-ready", () => {
+		mainWindow?.webview.executeJavascript(
+			`document.addEventListener('contextmenu', e => e.preventDefault());`,
+		);
+	});
+
 	// Close-to-tray: when window closes, we lose the reference
 	// The user can re-open from tray
 	mainWindow.on("close", () => {
@@ -203,7 +210,11 @@ function setupMenu(): void {
 				{ role: "hideOthers" },
 				{ role: "showAll" },
 				{ type: "separator" },
-				{ role: "quit" },
+				{
+					label: "Quit Docmost Desktop",
+					action: "quit-app",
+					accelerator: "Cmd+Q",
+				},
 			],
 		},
 		{
@@ -245,6 +256,12 @@ function setupMenu(): void {
 				},
 				{ type: "separator" },
 				{ role: "toggleFullScreen" },
+				{ type: "separator" },
+				{
+					label: "Developer Tools",
+					action: "toggle-devtools",
+					accelerator: "Cmd+Alt+I",
+				},
 			],
 		},
 		{
@@ -268,6 +285,12 @@ function setupMenu(): void {
 				if (mainWindow && settings.instanceUrl) {
 					mainWindow.webview.loadURL(settings.instanceUrl);
 				}
+				break;
+			case "toggle-devtools":
+				mainWindow?.webview.toggleDevTools();
+				break;
+			case "quit-app":
+				Utils.quit();
 				break;
 		}
 	});
